@@ -38,52 +38,53 @@
     </dependencies>
 
     <licenses>
+        <!-- Apache许可证 -->
         <license>
-            <name>Apache License 2.0</name>
-            <url>https://github.com/2229499815/async-excel/blob/master/LICENSE</url>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-
+    <!-- SCM信息 -> git在github上托管 -->
     <scm>
-        <tag>master</tag>
-        <url>https://github.com/2229499815/async-excel.git</url>
-        <connection>scm:https://github.com/2229499815/async-excel.git</connection>
-        <developerConnection>scm:git:git@github.com:2229499815/async-excel.git</developerConnection>
+        <connection>scm:git:gitee://gitee.com/2229499815/async-excel</connection>
+        <developerConnection>scm:git:ssh://gitee.com/2229499815/async-excel.git</developerConnection>
+        <url>https://gitee.com/2229499815/async-excel</url>
     </scm>
+    <!-- 开发者信息 -->
     <developers>
         <developer>
-            <id>yaozhonjie</id>
-            <name>yaozhonjie</name>
+            <name>yaozhongjie</name>
             <email>2229499815@qq.com</email>
             <url>https://github.com/2229499815</url>
         </developer>
     </developers>
 
     <profiles>
-
         <profile>
-            <id>release</id>
+            <id>oss</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
-                    <!-- Source -->
+                    <!-- 要生成Javadoc和Source jar文件，您必须配置javadoc和源Maven插件 -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin.version}</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <id>attach-sources</id>
                                 <goals>
                                     <goal>jar-no-fork</goal>
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- Javadoc -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin.version}</version>
+                        <version>3.4.1</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -91,21 +92,19 @@
                                     <goal>jar</goal>
                                 </goals>
                                 <configuration>
-                                    <doclint>none</doclint>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- GPG -->
+                    <!--  必须配置GPG插件用于使用以下配置对组件进行签名 -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin.version}</version>
-                        <configuration>
-                            <useAgent>false</useAgent>
-                        </configuration>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
+                                <id>sign-artifacts</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
@@ -118,11 +117,11 @@
             <distributionManagement>
                 <snapshotRepository>
                     <id>oss</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
                 <repository>
                     <id>oss</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>
         </profile>
