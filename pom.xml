@@ -8,6 +8,9 @@
     <artifactId>async-excel</artifactId>
     <packaging>pom</packaging>
     <version>0.9</version>
+    <name>Async Excel</name>
+    <url>https://github.com/2229499815/async-excel.git</url>
+    <description>AsyncExcel base on easy-excel for async</description>
     <modules>
         <module>async-excel-springboot-starter</module>
         <module>async-excel-core</module>
@@ -16,8 +19,28 @@
         <java.version>1.8</java.version>
         <lombok.version>1.18.4</lombok.version>
         <easyexcel.version>3.1.1</easyexcel.version>
-        <guava.version>20.0</guava.version>
+        <commons-compress.version>1.21</commons-compress.version>
+        <commons-codec.version>1.15</commons-codec.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons-compress.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -28,12 +51,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
-            <version>${easyexcel.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 
