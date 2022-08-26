@@ -7,7 +7,7 @@
     <groupId>com.asyncexcel</groupId>
     <artifactId>async-excel</artifactId>
     <packaging>pom</packaging>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.9</version>
     <modules>
         <module>async-excel-springboot-starter</module>
         <module>async-excel-core</module>
