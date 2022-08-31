@@ -99,6 +99,10 @@ public class AsyncImportTaskSupport implements ImportSupport {
                 errorDataList.add(o);
             }
         }
+        if(errorDataList.size()==0){
+            return;
+        }
+        
         if (ctx.getOutputStream() == null) {
             PipedOutputStream pos = new PipedOutputStream();
             try {
@@ -161,7 +165,9 @@ public class AsyncImportTaskSupport implements ImportSupport {
         }
         if (ctx.getInputStream() != null) {
             try {
-                ctx.setErrorFile(ctx.getFuture().get());
+                if (ctx.getFuture()!=null) {
+                    ctx.setErrorFile(ctx.getFuture().get());
+                }
                 ctx.getInputStream().close();
             } catch (Exception e) {
                 e.printStackTrace();
