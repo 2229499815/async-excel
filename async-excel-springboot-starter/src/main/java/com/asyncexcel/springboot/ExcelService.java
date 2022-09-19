@@ -63,6 +63,7 @@ public class ExcelService {
         ctx.setHeadList(param.getHeadList());
         ctx.setWriteHandlers(param.getWriteHandlers());
         ctx.setConverters(param.getConverters());
+        ctx.setSheetName(param.getSheetName());
         String fileName=param.getExportFileName();
         StringBuilder sb=new StringBuilder(filePrefix).append(task.getId()).append("-");
         if (StringUtils.isEmpty(fileName)){
