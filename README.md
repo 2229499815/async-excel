@@ -81,6 +81,19 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.password=root
 spring.datasource.username=root
 ```
+使用@EnableAysncExcel注解启用配置
+```java
+@SpringBootApplication
+@EnableAsyncExcel
+@MapperScan({"com.asyncexcel.sample.mapper"})
+public class AsyncExcelSampleApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AsyncExcelSampleApplication.class, args);
+    }
+
+}
+```
 编写极简示例  [示例项目 async-excel-sample](https://github.com/2229499815/async-excel-sample) 欢迎添加使用示例
 ```java
 @RestController
@@ -237,7 +250,7 @@ public class CosStorageService implements IStorageService {
 ```
 #### 自定义线程池
 你可以直接使用spring的线程池，如果你需要传入你系统自定义的上下文你只需要做如下配置即可
-前提是你已经定义好spring的线程池并填充好上下文装饰器ContextDecorator,线程装饰器的目的是为了江主线程的上下文传递给子线程
+前提是你已经定义好spring的线程池并填充好上下文装饰器ContextDecorator,线程装饰器的目的是为了将主线程的上下文传递给子线程
 ```java
 @Configuration
 @EnableAsync()
