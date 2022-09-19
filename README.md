@@ -294,7 +294,7 @@ public class AsyncExcelConfiguration {
 #### 导出动态表头
  dataExportParam.setDynamicHead=true;
  此时我们需要传入一个动态表头
- dataExportParam.setDeadList=list<List<string>>;
+ dataExportParam.setHeadList=list<List<String>>;
  
 #### 导出自定义样式
  dataExportParam.setWriteHandlers=List<WriterHandler>
@@ -305,7 +305,7 @@ public class AsyncExcelConfiguration {
  + `create_user_code` '用户编码'
  + `business_code` '业务编码'
 可以在插入数据时进行带入，如果你声明了自定义线程池，可以从系统上下文读取对应字段设置进去。
-DataParam.setxxx 系统将会默认插入数据库，不用在进行特殊处理。后续查询时你想根据什么维度查询都可以，businessCode用于区分不同的业务模块比如用户模块，订单模块可以顶一个枚举进行区分
+DataParam.setxxx 系统将会默认插入数据库，不用在进行特殊处理。后续查询时你想根据什么维度查询都可以，businessCode用于区分不同的业务模块比如用户模块，订单模块可以定一个枚举进行区分
 权限可以隔离到用户，也可以隔离到租户，根据你系统的要求自行定义。使用ExcelService.listPage进行数据查询。当然你也可以自定义接口的方式根据你喜欢的方式进行查询
 
 
