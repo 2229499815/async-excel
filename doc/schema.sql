@@ -3,7 +3,7 @@ CREATE TABLE `excel_task` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `type` tinyint(2) NOT NULL COMMENT '类型：1-导入,2-导出',
   `status` tinyint(2) NOT NULL DEFAULT 0 COMMENT '状态：0-初始,1-进行中,2-完成,3-失败',
-  `estimate_count` int(20) NOT NULL DEFAULT 0 COMMENT '预估总记录数',
+  `estimate_count` bigint(20) NOT NULL DEFAULT 0 COMMENT '预估总记录数',
   `total_count` bigint(20) NOT NULL DEFAULT 0 COMMENT '实际总记录数',
   `success_count` bigint(20) NOT NULL DEFAULT 0 COMMENT '成功记录数',
   `failed_count` bigint(20) NOT NULL DEFAULT 0 COMMENT '失败记录数',
