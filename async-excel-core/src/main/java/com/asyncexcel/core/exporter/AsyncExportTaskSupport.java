@@ -5,6 +5,7 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.handler.WriteHandler;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.asyncexcel.core.ExceptionUtil;
@@ -82,32 +83,39 @@ public class AsyncExportTaskSupport implements ExportSupport {
             }
             ctx.setOutputStream(pos);
         }
-        
+    
         //创建excel
         if (ctx.getExcelWriter() == null) {
             ExcelWriterBuilder writerBuilder = EasyExcel.write(ctx.getOutputStream())
                 .excelType(ExcelTypeEnum.XLSX).autoCloseStream(false);
-            //动态表头
+            ExcelWriter excelWriter = writerBuilder.build();
+        
+            ctx.setExcelWriter(excelWriter);
+        }
+        //创建sheet 此代码块将在后续某个版本的迭代中移除，sheet将由handler的init方法创建
+        if (ctx.getWriteSheet()==null){
+            ExcelWriterSheetBuilder sheetBuilder = EasyExcel.writerSheet(0)
+                .sheetName(ctx.getSheetName());
+            //动态表头以sheet为单位
             if (ctx.isDynamicHead()) {
-                writerBuilder.head(ctx.getHeadList());
+                sheetBuilder.head(ctx.getHeadList());
             } else {
-                writerBuilder.head(ctx.getHeadClass());
+                sheetBuilder.head(ctx.getHeadClass());
             }
+            //自定义样式以sheet为单位
             if (ctx.getWriteHandlers() != null && ctx.getWriteHandlers().size() > 0) {
                 for (WriteHandler writeHandler : ctx.getWriteHandlers()) {
-                    writerBuilder.registerWriteHandler(writeHandler);
+                    sheetBuilder.registerWriteHandler(writeHandler);
                 }
             }
+            //自定义类型转换器以sheet为单位
             if (ctx.getConverters() != null && ctx.getConverters().size() > 0) {
                 for (Converter<?> converter : ctx.getConverters()) {
-                    writerBuilder.registerConverter(converter);
+                    sheetBuilder.registerConverter(converter);
                 }
             }
-            ExcelWriter excelWriter = writerBuilder.build();
-            WriteSheet writeSheet = EasyExcel.writerSheet(0).sheetName(ctx.getSheetName())
-                .build();
+            WriteSheet writeSheet = sheetBuilder.build();
             ctx.setWriteSheet(writeSheet);
-            ctx.setExcelWriter(excelWriter);
         }
         
         ctx.getExcelWriter().write(dataList, ctx.getWriteSheet());

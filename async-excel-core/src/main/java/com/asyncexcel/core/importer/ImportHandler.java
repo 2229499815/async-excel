@@ -25,7 +25,7 @@ public interface ImportHandler<T> extends Handler {
      * @param param
      * @throws Exception
      */
-    default void beforeImportData(List<T> list, DataImportParam param) throws Exception {
+    default void beforePerPage(ImportContext ctx, List<T> list, DataImportParam param) throws Exception {
     }
     
     /**导入后
@@ -34,7 +34,7 @@ public interface ImportHandler<T> extends Handler {
      * @param errorMsgList
      * @throws Exception
      */
-    default void afterImportData(List<T> list, DataImportParam param, List<ErrorMsg> errorMsgList)
+    default void afterPerPage(ImportContext ctx, List<T> list, DataImportParam param, List<ErrorMsg> errorMsgList)
         throws Exception {
     }
 }

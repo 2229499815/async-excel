@@ -16,7 +16,9 @@ import java.util.concurrent.Future;
  * @Date 2022/7/11 10:12
  */
 public class ExportContext extends ExcelContext {
+    
     private OutputStream outputStream;
+    private int limit = 1000;
     private ExcelWriter excelWriter;
     private WriteSheet writeSheet;
     private InputStream inputStream;
@@ -31,18 +33,30 @@ public class ExportContext extends ExcelContext {
     private List<Converter<?>> converters;
     private String failMessage;
     
+    public int getLimit() {
+        return limit;
+    }
+    
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+    
+    @Deprecated
     public List<WriteHandler> getWriteHandlers() {
         return writeHandlers;
     }
     
+    @Deprecated
     public void setWriteHandlers(List<WriteHandler> writeHandlers) {
         this.writeHandlers = writeHandlers;
     }
     
+    @Deprecated
     public List<Converter<?>> getConverters() {
         return converters;
     }
     
+    @Deprecated
     public void setConverters(List<Converter<?>> converters) {
         this.converters = converters;
     }

@@ -2,6 +2,7 @@ package com.asyncexcel.core.exporter;
 
 import com.asyncexcel.core.ExceptionUtil;
 import com.asyncexcel.core.ExportPage;
+import com.asyncexcel.core.TriFunction;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiFunction;
 import org.apache.commons.collections4.CollectionUtils;
@@ -21,14 +22,14 @@ public class AsyncExcelExporter {
     public AsyncExcelExporter(ExecutorService executor) {
         this.executor = executor;
     }
-    
+    @Deprecated
     public void exportData(ExportHandler handler, ExportSupport support, DataExportParam param,
         ExportContext ctx) {
         
         BiFunction<Integer, Integer, ExportPage> dataFunction = (start, limit) -> {
             support.onExport(ctx);
             try {
-                handler.beforeExportData(param);
+                handler.beforePerPage(ctx,param);
                 ExportPage exportPage = handler.exportData(start, limit, param);
                 if (exportPage==null){
                     throw new RuntimeException("导出数据为空");
@@ -38,7 +39,7 @@ public class AsyncExcelExporter {
                 }
                 ctx.record(exportPage.getRecords().size());
                 support.onWrite(exportPage.getRecords(), ctx);
-                handler.afterExportData(exportPage.getRecords());
+                handler.afterPerPage(exportPage.getRecords(),ctx,param);
                 return exportPage;
             } catch (Exception e) {
                 log.error("导出过程发生异常");
@@ -51,7 +52,7 @@ public class AsyncExcelExporter {
         };
         executor.execute(() -> {
             try {
-                handler.init();
+                handler.init(ctx);
                 int cursor = 1;
                 ExportPage page = dataFunction.apply(cursor, param.getLimit());
                 Long total = page.getTotal();
@@ -59,6 +60,71 @@ public class AsyncExcelExporter {
                 long pageNum = (total + page.getSize() - 1) / page.getSize();
                 for (cursor++; cursor <= pageNum; cursor++) {
                     dataFunction.apply(cursor, param.getLimit());
+                }
+                support.onComplete(ctx);
+            } catch (Exception e) {
+                log.error("导出异常", e);
+                if (e instanceof ExportException) {
+                    ctx.setFailMessage(e.getMessage());
+                } else {
+                    ctx.setFailMessage("系统异常，联系管理员");
+                }
+                support.onError(ctx);
+            }
+        });
+    }
+    
+    /**
+     * 支持多sheet导出，支持按批次进行单元格合并等功能
+     *
+     * @param handlers
+     * @param support
+     * @param param
+     * @param ctx
+     */
+    public void exportData(ExportSupport support, DataExportParam param, ExportContext ctx, ExportHandler... handlers) {
+        TriFunction<ExportHandler, Integer, Integer, ExportPage> dataFunction = (h, start, limit) -> {
+            support.onExport(ctx);
+            try {
+                h.beforePerPage(ctx, param);
+                ExportPage exportPage = h.exportData(start, limit, param);
+                if (CollectionUtils.isEmpty(exportPage.getRecords())) {
+                    return exportPage;
+                }
+                ctx.record(exportPage.getRecords().size());
+                support.onWrite(exportPage.getRecords(), ctx);
+                h.afterPerPage(exportPage.getRecords(), ctx, param);
+                return exportPage;
+            } catch (Exception e) {
+                log.error("导出过程发生异常");
+                if (e instanceof ExportException) {
+                    throw (ExportException) e;
+                } else {
+                    throw ExceptionUtil.wrap2Runtime(e);
+                }
+            }
+        };
+        
+        executor.execute(() -> {
+            try {
+                if (handlers == null || handlers.length==0){
+                    throw new ExportException("未设置导出处理类");
+                }
+                int sheetNo=0;
+                for (ExportHandler handler : handlers) {
+                    handler.init(ctx);
+                    if (ctx.getWriteSheet()!=null){
+                        ctx.getWriteSheet().setSheetNo(sheetNo);
+                    }
+                    sheetNo++;
+                    int cursor = 1;
+                    ExportPage page = dataFunction.apply(handler, cursor, ctx.getLimit());
+                    Long total = page.getTotal();
+                    ctx.getTask().setEstimateCount(total + ctx.getTask().getEstimateCount());
+                    Long pageNum = (total + page.getSize() - 1) / page.getSize();
+                    for (cursor++; cursor <= pageNum; cursor++) {
+                        dataFunction.apply(handler, cursor, ctx.getLimit());
+                    }
                 }
                 support.onComplete(ctx);
             } catch (Exception e) {

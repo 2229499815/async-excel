@@ -37,7 +37,7 @@ public class ExcelTask implements Serializable {
     /**
      * 预估记录数 可能包含空行数据不准确，但是大部分情况时准确的
      */
-    private Long estimateCount;
+    private Long estimateCount=0L;
     
     /**
      * 实际总记录数 为成功记录数+失败记录数

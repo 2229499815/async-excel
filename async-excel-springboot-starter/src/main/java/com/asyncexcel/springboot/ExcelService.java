@@ -58,6 +58,7 @@ public class ExcelService {
         ExcelTask task = support.createTask(param);
         ExportContext ctx=new ExportContext();
         ctx.setTask(task);
+        ctx.setLimit(param.getLimit());
         ctx.setHeadClass(param.getHeadClass());
         ctx.setDynamicHead(param.isDynamicHead());
         ctx.setHeadList(param.getHeadList());
@@ -86,6 +87,47 @@ public class ExcelService {
         return task.getId();
     }
     
+    public Long doExport(DataExportParam param, Class<? extends ExportHandler>... clses) {
+        String filePrefix = "导出";
+        ExportHandler[] handlers = new ExportHandler[clses.length];
+        for (int i = 0; i < clses.length; i++) {
+            ExportHandler handler = context.getInstance(clses[i]);
+            handlers[i]=handler;
+        }
+        
+        ExportSupport support = context.getInstance(ExportSupport.class);
+        ExcelTask task = support.createTask(param);
+        ExportContext ctx = new ExportContext();
+        ctx.setLimit(param.getLimit());
+        ctx.setTask(task);
+        ctx.setHeadClass(param.getHeadClass());
+        ctx.setDynamicHead(param.isDynamicHead());
+        ctx.setHeadList(param.getHeadList());
+        ctx.setWriteHandlers(param.getWriteHandlers());
+        ctx.setConverters(param.getConverters());
+        ctx.setSheetName(param.getSheetName());
+        String fileName = param.getExportFileName();
+        StringBuilder sb = new StringBuilder(filePrefix).append(task.getId()).append("-");
+        if (StringUtils.isEmpty(fileName)) {
+            sb.append(ExcelTypeEnum.XLSX.getValue());
+        } else {
+            if (fileName.lastIndexOf(".") != -1) {
+                String extension = fileName.substring(fileName.lastIndexOf("."));
+                if (!ExcelTypeEnum.XLSX.getValue().equals(extension)) {
+                    sb.append(fileName).append(ExcelTypeEnum.XLSX.getValue());
+                } else {
+                    sb.append(fileName);
+                }
+            } else {
+                sb.append(fileName).append(ExcelTypeEnum.XLSX.getValue());
+            }
+        }
+        ctx.setFileName(sb.toString());
+        AsyncExcelExporter asyncExcelExporter = new AsyncExcelExporter(
+            excelThreadPool.getExecutor());
+        asyncExcelExporter.exportData(support, param, ctx, handlers);
+        return task.getId();
+    }
     /**提供给外部定制划按权限分页查询
      * @param task
      * @return

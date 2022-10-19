@@ -31,11 +31,11 @@ public class AsyncExcelImporter {
         Consumer<List<T>> consumer = (dataList -> {
             support.onImport(ctx);
             try {
-                handler.beforeImportData(dataList, param);
+                handler.beforePerPage(ctx, dataList, param);
                 List<ErrorMsg> errorList = handler.importData(dataList, param);
                 ctx.record(dataList.size(), errorList.size());
                 support.onWrite(dataList, ctx, errorList);
-                handler.afterImportData(dataList, param, errorList);
+                handler.afterPerPage(ctx, dataList, param, errorList);
             } catch (Exception e) {
                 log.error("导入过程异常");
                 if (e instanceof ImportException) {
@@ -45,7 +45,7 @@ public class AsyncExcelImporter {
                 }
             }
         });
-        AsyncPageReadListener asyncReadListener = new AsyncPageReadListener(consumer,support, ctx,
+        AsyncPageReadListener asyncReadListener = new AsyncPageReadListener(consumer, support, ctx,
             param.getBatchSize());
         ExcelReader reader = EasyExcel
             .read(param.getStream(), param.getModel(), asyncReadListener).build();
@@ -53,7 +53,7 @@ public class AsyncExcelImporter {
         
         executor.execute(() -> {
             try {
-                handler.init();
+                handler.init(ctx);
                 support.beforeImport();
                 reader.read(readSheet);
                 support.onComplete(ctx);
