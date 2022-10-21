@@ -18,7 +18,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
@@ -29,11 +28,15 @@ import org.springframework.util.StringUtils;
 public class ExcelService {
     private final static Logger log= LoggerFactory.getLogger(ExcelService.class);
     
-    @Autowired
     ExcelThreadPool excelThreadPool;
     
-    @Autowired
     SpringExcelContext context;
+    
+    public ExcelService(ExcelThreadPool excelThreadPool, SpringExcelContext context) {
+        this.excelThreadPool = excelThreadPool;
+        this.context = context;
+    }
+    
     public Long doImport(Class<? extends ImportHandler> cls, DataImportParam param){
         ImportHandler handler = context.getInstance(cls);
         ImportSupport support = context.getInstance(ImportSupport.class);

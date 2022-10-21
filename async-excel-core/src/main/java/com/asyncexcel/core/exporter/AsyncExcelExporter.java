@@ -22,6 +22,7 @@ public class AsyncExcelExporter {
     public AsyncExcelExporter(ExecutorService executor) {
         this.executor = executor;
     }
+    
     @Deprecated
     public void exportData(ExportHandler handler, ExportSupport support, DataExportParam param,
         ExportContext ctx) {
@@ -29,9 +30,9 @@ public class AsyncExcelExporter {
         BiFunction<Integer, Integer, ExportPage> dataFunction = (start, limit) -> {
             support.onExport(ctx);
             try {
-                handler.beforePerPage(ctx,param);
+                handler.beforePerPage(ctx, param);
                 ExportPage exportPage = handler.exportData(start, limit, param);
-                if (exportPage==null){
+                if (exportPage == null) {
                     throw new RuntimeException("导出数据为空");
                 }
                 if (CollectionUtils.isEmpty(exportPage.getRecords())) {
@@ -39,7 +40,7 @@ public class AsyncExcelExporter {
                 }
                 ctx.record(exportPage.getRecords().size());
                 support.onWrite(exportPage.getRecords(), ctx);
-                handler.afterPerPage(exportPage.getRecords(),ctx,param);
+                handler.afterPerPage(exportPage.getRecords(), ctx, param);
                 return exportPage;
             } catch (Exception e) {
                 log.error("导出过程发生异常");
@@ -52,7 +53,7 @@ public class AsyncExcelExporter {
         };
         executor.execute(() -> {
             try {
-                handler.init(ctx);
+                handler.init(ctx, param);
                 int cursor = 1;
                 ExportPage page = dataFunction.apply(cursor, param.getLimit());
                 Long total = page.getTotal();
@@ -82,7 +83,8 @@ public class AsyncExcelExporter {
      * @param param
      * @param ctx
      */
-    public void exportData(ExportSupport support, DataExportParam param, ExportContext ctx, ExportHandler... handlers) {
+    public void exportData(ExportSupport support, DataExportParam param, ExportContext ctx,
+        ExportHandler... handlers) {
         TriFunction<ExportHandler, Integer, Integer, ExportPage> dataFunction = (h, start, limit) -> {
             support.onExport(ctx);
             try {
@@ -107,13 +109,13 @@ public class AsyncExcelExporter {
         
         executor.execute(() -> {
             try {
-                if (handlers == null || handlers.length==0){
+                if (handlers == null || handlers.length == 0) {
                     throw new ExportException("未设置导出处理类");
                 }
-                int sheetNo=0;
+                int sheetNo = 0;
                 for (ExportHandler handler : handlers) {
-                    handler.init(ctx);
-                    if (ctx.getWriteSheet()!=null){
+                    handler.init(ctx, param);
+                    if (ctx.getWriteSheet() != null) {
                         ctx.getWriteSheet().setSheetNo(sheetNo);
                     }
                     sheetNo++;

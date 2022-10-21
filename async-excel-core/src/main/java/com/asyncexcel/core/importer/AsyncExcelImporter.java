@@ -53,7 +53,7 @@ public class AsyncExcelImporter {
         
         executor.execute(() -> {
             try {
-                handler.init(ctx);
+                handler.init(ctx, param);
                 support.beforeImport();
                 reader.read(readSheet);
                 support.onComplete(ctx);
