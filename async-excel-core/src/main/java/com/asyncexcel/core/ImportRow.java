@@ -3,6 +3,7 @@ package com.asyncexcel.core;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ContentFontStyle;
+import com.asyncexcel.core.importer.SheetConst;
 import java.util.Objects;
 import org.apache.poi.ss.usermodel.Font;
 
@@ -14,12 +15,12 @@ import org.apache.poi.ss.usermodel.Font;
 public class ImportRow implements ISheetRow {
     
     @ContentFontStyle(color = Font.COLOR_RED)
-    @ExcelProperty("失败原因")
+    @ExcelProperty(SheetConst.FAIL_MSG_TITLE)
     String rowFailMessage;
     @ExcelIgnore
     private int sheetIndex;
     @ContentFontStyle(color = Font.COLOR_RED)
-    @ExcelProperty("原文件行号")
+    @ExcelProperty(SheetConst.FAIL_ROW_TITLE)
     private int row;
     
     public String getRowFailMessage() {

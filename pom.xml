@@ -7,7 +7,7 @@
     <groupId>com.asyncexcel</groupId>
     <artifactId>async-excel</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <name>async-excel</name>
     <url>https://github.com/2229499815/async-excel.git</url>
     <description>AsyncExcel base on easy-excel for async</description>

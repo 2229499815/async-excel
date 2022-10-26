@@ -71,6 +71,8 @@ public class AsyncExcelExporter {
                     ctx.setFailMessage("系统异常，联系管理员");
                 }
                 support.onError(ctx);
+            } finally {
+                handler.callBack(ctx, param);
             }
         });
     }
@@ -137,6 +139,10 @@ public class AsyncExcelExporter {
                     ctx.setFailMessage("系统异常，联系管理员");
                 }
                 support.onError(ctx);
+            } finally {
+                for (ExportHandler handler : handlers) {
+                    handler.callBack(ctx, param);
+                }
             }
         });
     }

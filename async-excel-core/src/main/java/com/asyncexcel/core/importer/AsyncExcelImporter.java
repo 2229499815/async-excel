@@ -65,6 +65,8 @@ public class AsyncExcelImporter {
                     ctx.setFailMessage("系统异常，联系管理员");
                 }
                 support.onError(ctx);
+            } finally {
+                handler.callBack(ctx, param);
             }
         });
     }

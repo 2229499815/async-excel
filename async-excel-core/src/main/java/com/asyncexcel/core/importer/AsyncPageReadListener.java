@@ -10,6 +10,7 @@ import com.alibaba.excel.util.ConverterUtils;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.excel.util.StringUtils;
 import com.asyncexcel.core.ISheetRow;
+import com.asyncexcel.core.ImportRowMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +94,12 @@ public class AsyncPageReadListener<T> implements ReadListener<T> {
             Map<Integer, ReadCellData<?>> cellMap = (Map<Integer, ReadCellData<?>>)context.readRowHolder().getCurrentRowAnalysisResult();
             Map<Integer, String> cellStringMap = ConverterUtils
                 .convertToStringMap(cellMap, context);
+            //数据对齐表头
+            if (cellStringMap.size()<headMap.size()) {
+                for (int i = 0; i < headMap.size() - cellStringMap.size(); i++) {
+                    cellStringMap.put(cellStringMap.size(),null);
+                }
+            }
             cellStringMap.put(cellStringMap.size(),"格式错误,{列: "+title+" }");
             cellStringMap.put(cellStringMap.size(),row+"");
             List<String> rowList = cellStringMap.values().stream().collect(Collectors.toList());
@@ -113,6 +120,13 @@ public class AsyncPageReadListener<T> implements ReadListener<T> {
             ctx.setSheetName(sheetName);
         }
         Integer rowIndex = context.readRowHolder().getRowIndex();
+        //20221025 添加动态表头支持
+        if (data instanceof ImportRowMap){
+            ImportRowMap rowMap = (ImportRowMap) data;
+            rowMap.setDataMap(context.readRowHolder().getCellMap());
+            rowMap.setHeadMap(headMap);
+        }
+        
         if (data instanceof ISheetRow) {
             ISheetRow rowData = (ISheetRow) data;
             rowData.setRow(rowIndex);

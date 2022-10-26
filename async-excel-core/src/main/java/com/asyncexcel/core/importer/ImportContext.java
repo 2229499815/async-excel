@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
  */
 public class ImportContext extends ExcelContext {
     private String fileName;
-    private String sheetName="Sheet1";
+    private String sheetName;
     private Class<?> errorHeadClass;
     private ExcelWriter excelWriter;
     private WriteSheet writeSheet;

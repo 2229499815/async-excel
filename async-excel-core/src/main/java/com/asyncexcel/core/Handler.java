@@ -15,4 +15,12 @@ public interface Handler {
     default void init(ExcelContext ctx, DataParam param) {
         //do some init operation
     }
+    
+    /** 整个生命周期完成后回调处理
+     * @param ctx
+     * @param param
+     */
+    default void callBack(ExcelContext ctx, DataParam param){
+        //do something callBack
+    }
 }
