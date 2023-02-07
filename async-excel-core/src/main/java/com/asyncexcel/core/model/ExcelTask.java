@@ -33,6 +33,11 @@ public class ExcelTask implements Serializable {
      * 状态：0-初始,1-进行中,2-完成,3-失败
      */
     private Integer status;
+
+    /**
+     * 源文件
+     */
+    private String sourceFile;
     
     /**
      * 预估记录数 可能包含空行数据不准确，但是大部分情况时准确的

@@ -2,7 +2,6 @@ package com.asyncexcel.core.importer;
 
 import com.asyncexcel.core.DataParam;
 import java.io.InputStream;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,6 +24,11 @@ public class DataImportParam extends DataParam {
      * 输入流
      */
     private InputStream stream;
+
+    /**
+     * 源文件url,用于保存源文件地址
+     */
+    private String sourceFile;
     /**
      * 文件名称
      */
