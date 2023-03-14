@@ -1,6 +1,7 @@
 package com.asyncexcel.core.importer;
 
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.asyncexcel.core.ExcelContext;
 import java.io.InputStream;
@@ -18,6 +19,8 @@ public class ImportContext extends ExcelContext {
     private Class<?> errorHeadClass;
     private ExcelWriter excelWriter;
     private WriteSheet writeSheet;
+    private ReadSheet readSheet;
+
     private OutputStream outputStream;
     private InputStream inputStream;
     private Future<String> future;
@@ -98,7 +101,15 @@ public class ImportContext extends ExcelContext {
     public void setWriteSheet(WriteSheet writeSheet) {
         this.writeSheet = writeSheet;
     }
-    
+
+    public ReadSheet getReadSheet() {
+        return readSheet;
+    }
+
+    public void setReadSheet(ReadSheet readSheet) {
+        this.readSheet = readSheet;
+    }
+
     public OutputStream getOutputStream() {
         return outputStream;
     }

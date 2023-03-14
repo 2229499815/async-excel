@@ -50,12 +50,12 @@ public class AsyncExcelImporter {
         ExcelReader reader = EasyExcel
             .read(param.getStream(), param.getModel(), asyncReadListener).build();
         ReadSheet readSheet = EasyExcel.readSheet(0).build();
-        
+        ctx.setReadSheet(readSheet);
         executor.execute(() -> {
             try {
                 handler.init(ctx, param);
                 support.beforeImport();
-                reader.read(readSheet);
+                reader.read(ctx.getReadSheet());
                 support.onComplete(ctx);
             } catch (Exception e) {
                 log.error("导入发生异常", e);
