@@ -9,6 +9,7 @@ import com.alibaba.excel.read.metadata.holder.xlsx.XlsxReadSheetHolder;
 import com.alibaba.excel.util.ConverterUtils;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.excel.util.StringUtils;
+import com.asyncexcel.core.ExceptionUtil;
 import com.asyncexcel.core.ISheetRow;
 import com.asyncexcel.core.ImportRowMap;
 import java.util.ArrayList;
@@ -109,6 +110,8 @@ public class AsyncPageReadListener<T> implements ReadListener<T> {
             this.support.onWrite(lists,ctx,null);
         }else if(exception instanceof HeadCheckException){
             throw new HeadCheckException(exception.getMessage());
+        }else {
+            throw ExceptionUtil.wrap2Runtime(exception);
         }
     }
     
