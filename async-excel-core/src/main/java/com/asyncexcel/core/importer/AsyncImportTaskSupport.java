@@ -145,8 +145,9 @@ public class AsyncImportTaskSupport implements ImportSupport {
                         //数据对齐表头,避免最后一列为空时，错误信息的列被挤到上一列
                         Map<Integer, String>  headMap= o1.getHeadMap();
                         int size = headMap.size();
-                        if (cellDatas.size()<size) {
-                            for (int i = 0; i < size - cellDatas.size(); i++) {
+                        int dataSize = cellDatas.size();
+                        if (dataSize < size) {
+                            for (int i = 0; i < size - dataSize; i++) {
                                 cellDatas.add(null);
                             }
                         }
