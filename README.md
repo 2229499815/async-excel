@@ -5,8 +5,6 @@
 ## asyncexcel介绍
  
 + 1、asyncexcel基于阿里的easyexcel包装，抽取异步骨架，不改变easyexcel的特性
-+ 2、由于开启表头校验之后@ExcelProperty注解的index无法使用，所以编写表头model的时候顺序要跟excel一至，(下个版本优化)
-+ 3、百万数据量6列导入导出64MBjvm内存无丝毫压力
 
 支持的功能列表：
 + 支持线程池外部声明，可传入SystemContext;
@@ -220,6 +218,7 @@ public class UserImportHandler implements ImportHandler<UserImportModel> {
 #### 自定义存储
 假如你已经对接好了第三方的存储比如oss、cos，七牛云存储等
 你只需要在你的项目中实现IStorageService 接口即可
+友情链接：存储可以引入!梦想大佬的sdk【[spring-file-storage](https://github.com/1171736840/spring-file-storage)】 全平台支持
 ```java
 @Component
 public class CosStorageService implements IStorageService {
@@ -321,7 +320,17 @@ public class AsyncExcelConfiguration {
 DataParam.setxxx 系统将会默认插入数据库，不用在进行特殊处理。后续查询时你想根据什么维度查询都可以，businessCode用于区分不同的业务模块比如用户模块，订单模块可以定一个枚举进行区分
 权限可以隔离到用户，也可以隔离到租户，根据你系统的要求自行定义。使用ExcelService.listPage进行数据查询。当然你也可以自定义接口的方式根据你喜欢的方式进行查询
 
+#### 更新日志
+建议使用最新版本
 
+1.1.2版本
+#bug修复
+
+1.1.1版本
+#添加多sheet导出支持
+#添加动态表头导入
+#添加动态表头导出
+#重构导入导出将writeSheet移动至handler中在init阶段进行定义。
 
 
 
