@@ -136,7 +136,7 @@ public class AsyncPageReadListener<T> implements ReadListener<T> {
         } else {
             throw new RuntimeException("导入对应实体必须继承ISheetRow");
         }
-        if (ctx.getTask().getEstimateCount() == null) {
+        if (ctx.getTask().getEstimateCount() == 0L) {
             Integer headRowNumber = context.readSheetHolder().getHeadRowNumber();
             Integer totalCount = context.getTotalCount() - headRowNumber;
             ctx.getTask().setEstimateCount(totalCount.longValue());
