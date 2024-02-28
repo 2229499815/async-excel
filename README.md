@@ -68,7 +68,7 @@ CREATE TABLE `excel_task` (
 ```
 配置数据源(此处为多数据源，使用了spring 父子容器技术，所以不影响你原本的数据源)
 ```properties
-#aysncexcel 数据源
+#asyncexcel 数据源
 spring.excel.datasource.url=jdbc:mysql://localhost:3306/async-excel?serverTimezone=GMT%2B8&autoReconnect=true&allowMultiQueries=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&&useCursorFetch=true&&rewriteBatchedStatements=true
 spring.excel.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.excel.datasource.password=root
