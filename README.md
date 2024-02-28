@@ -79,7 +79,7 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.password=root
 spring.datasource.username=root
 ```
-使用@EnableAysncExcel注解启用配置
+使用@EnableAsyncExcel注解启用配置
 ```java
 @SpringBootApplication
 @EnableAsyncExcel
