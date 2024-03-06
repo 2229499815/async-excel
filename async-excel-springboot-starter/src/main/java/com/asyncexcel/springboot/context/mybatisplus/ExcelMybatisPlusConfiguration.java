@@ -41,11 +41,6 @@ public class ExcelMybatisPlusConfiguration {
         MybatisSqlSessionFactoryBean mybatisSqlSessionFactoryBean = new MybatisSqlSessionFactoryBean();
         mybatisSqlSessionFactoryBean.setVfs(SpringBootVFS.class);
         mybatisSqlSessionFactoryBean.setDataSource(dataSource);
-        GlobalConfig globalConfig = new GlobalConfig();
-        DbConfig dbConfig = new DbConfig();
-        dbConfig.setIdType(IdType.AUTO);
-        globalConfig.setDbConfig(dbConfig);
-        mybatisSqlSessionFactoryBean.setGlobalConfig(globalConfig);
         return mybatisSqlSessionFactoryBean.getObject();
     }
     
